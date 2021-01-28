@@ -7,6 +7,9 @@ public class Run : State
 	[Export]
 	public NodePath stateMachinePath;
 	
+	[Export]
+	public float maxSpeedSprint = 900;
+
 	private Move _parentMove;
 	
 	public Run() : base() {}
@@ -20,8 +23,17 @@ public class Run : State
 
 	public override void PhysicsProcess(float delta)
 	{
+		if (Input.IsActionPressed("sprint"))
+		{
+			_parentMove._maxSpeed.x = maxSpeedSprint;
+		}
+		else
+		{
+			_parentMove._maxSpeed.x = _parentMove.maxSpeedDefault.x;
+		}
+
 		var player = Owner as Player;
-		if(player.IsOnFloor() && Move.GetMoveDirection().x == 0.0)
+		if(player.IsOnFloor() && _parentMove._velocity.Length() < 1.0)
 		{
 			_stateMachine.TransitionTo("Move/Idle");
 		}

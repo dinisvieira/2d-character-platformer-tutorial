@@ -28,13 +28,13 @@ public class Air : State
 
 		if (player.IsOnFloor())
 		{
-			if (Move.GetMoveDirection().x != 0.0)
-			{
-				_stateMachine.TransitionTo("Move/Run");
-			}
-			else if (player.IsOnFloor())
+			if (Move.GetMoveDirection().x == 0.0)
 			{
 				_stateMachine.TransitionTo("Move/Idle");
+			}
+			else
+			{
+				_stateMachine.TransitionTo("Move/Run");
 			}
 		}
 	}
@@ -52,7 +52,7 @@ public class Air : State
 		if (msg != null && msg.ContainsKey("velocity") && msg["velocity"] is Vector2 vel)
 		{
 			_parentMove._velocity = vel;
-			_parentMove._maxSpeed.x = Math.Max(vel.x, _parentMove.maxSpeedDefault.x);
+			_parentMove._maxSpeed.x = Math.Max(Math.Abs(vel.x), _parentMove._maxSpeed.x);
 		}
 
 		if (msg != null && msg.ContainsKey("impulse") && msg["impulse"] is float imp)
@@ -63,7 +63,8 @@ public class Air : State
 
 	private Vector2 CalculateJumpVelocity(float impulse)
 	{
-		var calcVelocity = Move.CalculateVelocity(_parentMove._velocity, _parentMove._maxSpeed, new Vector2(0, impulse), 1, Vector2.Up);
+		var calcVelocity = Move.CalculateVelocity(_parentMove._velocity, _parentMove._maxSpeed, new Vector2(0, impulse), _parentMove._decceleration, 1, Vector2.Up);
+
 		return calcVelocity;
 	}
 
