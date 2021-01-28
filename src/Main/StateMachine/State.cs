@@ -30,7 +30,7 @@ public abstract class State : Node
 	{
 	}
 	
-	public virtual void Enter(IDictionary<string, string> msg = null)
+	public virtual void Enter(IDictionary<string, object> msg = null)
 	{
 	}
 	

@@ -43,13 +43,11 @@ public class Move : State
 
 	public override void UnhandledInput(InputEvent @event)
 	{
-		
-		/*
-		if (@event is InputEventMouseMotion eventMouse)
+		var player = Owner as Player;
+		if (player.IsOnFloor() && @event.IsActionPressed("jump"))
 		{
-			
+			_stateMachine.TransitionTo("Move/Air", new Dictionary<string, object>(){{"impulse", jumpImpulse}});
 		}
-		*/
 	}
 	
 	public static Vector2 CalculateVelocity(Vector2 oldVelocity, Vector2 maxSpeed, Vector2 acceleration, float delta, Vector2 moveDirection)

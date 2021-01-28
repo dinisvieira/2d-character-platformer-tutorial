@@ -53,7 +53,7 @@ public class StateMachine : Node
 		State.UnhandledInput(@event);
 	}
 	
-	public void TransitionTo(string targetStatePath, IDictionary<string, string> msg = null)
+	public void TransitionTo(string targetStatePath, IDictionary<string, object> msg = null)
 	{
 		if(!HasNode(targetStatePath))
 		{

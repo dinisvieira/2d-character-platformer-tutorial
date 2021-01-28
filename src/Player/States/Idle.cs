@@ -36,7 +36,7 @@ public class Idle : State
 		_parentMove.UnhandledInput(@event);
 	}
 	
-	public override void Enter(IDictionary<string, string> msg = null)
+	public override void Enter(IDictionary<string, object> msg = null)
 	{
 		_parentMove.Enter(msg);
 		
