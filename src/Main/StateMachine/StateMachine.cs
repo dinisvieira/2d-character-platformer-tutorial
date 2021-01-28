@@ -38,6 +38,7 @@ public class StateMachine : Node
 		get { return _stateName; }
 		private set
 		{
+			GD.Print(value);
 			_stateName = value;
 		}
 	}
