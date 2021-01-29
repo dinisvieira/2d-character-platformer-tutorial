@@ -10,8 +10,14 @@ public class Air : State
 	[Export]
 	public float accelerationX = 5000;
 	
+	[Export]		
+	public float jumpImpulse = 900;
+
 	private Move _parentMove;
-	
+
+	private int _maxJumpCount = 2;
+	private int _currJumpCount = 0;
+
 	public Air() : base() {}
 	
 	// Called when the node enters the scene tree for the first time.
@@ -41,9 +47,19 @@ public class Air : State
 
 	public override void UnhandledInput(InputEvent @event)
 	{
+		if (@event.IsActionPressed("jump") && _currJumpCount < _maxJumpCount)
+		{
+			Jump();
+		}
 		_parentMove.UnhandledInput(@event);
 	}
-	
+
+	private void Jump()
+	{
+		_parentMove._velocity += CalculateJumpVelocity(jumpImpulse);
+		_currJumpCount++;
+	}
+
 	public override void Enter(IDictionary<string, object> msg = null)
 	{
 		_parentMove.Enter(msg);
@@ -55,16 +71,19 @@ public class Air : State
 			_parentMove._maxSpeed.x = Math.Max(Math.Abs(vel.x), _parentMove._maxSpeed.x);
 		}
 
-		if (msg != null && msg.ContainsKey("impulse") && msg["impulse"] is float imp)
+		if (msg != null && msg.ContainsKey("impulse"))
 		{
-			_parentMove._velocity += CalculateJumpVelocity(imp);
+			Jump();
+		}
+		else
+		{
+			_currJumpCount++; //to avoid double jump is player is falling (of a cliff for example)
 		}
 	}
 
 	private Vector2 CalculateJumpVelocity(float impulse)
 	{
-		var calcVelocity = Move.CalculateVelocity(_parentMove._velocity, _parentMove._maxSpeed, new Vector2(0, impulse), _parentMove._decceleration, 1, Vector2.Up);
-
+		var calcVelocity = Move.CalculateVelocity(_parentMove._velocity, _parentMove._maxSpeed, new Vector2(0, impulse), _parentMove._decceleration, 1, Vector2.Up, _parentMove.maxFallSpeed);
 		return calcVelocity;
 	}
 
@@ -72,5 +91,6 @@ public class Air : State
 	{
 		_parentMove.Exit();
 		_parentMove._acceleration = _parentMove.accelerationDefault;
+		_currJumpCount = 0;
 	}
 }

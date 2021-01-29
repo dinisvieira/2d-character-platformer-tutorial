@@ -16,8 +16,9 @@ public class Move : State
 	[Export]
 	public Vector2 deccelerationDefault = new Vector2(500, 3000);
 
-	[Export]		
-	public float jumpImpulse = 900;
+	[Export]
+	public float maxFallSpeed = 1500;
+
 
 	public Vector2 _acceleration;
 	public Vector2 _decceleration;
@@ -38,7 +39,7 @@ public class Move : State
 	public override void PhysicsProcess(float delta)
 	{
 		var moveDirection = GetMoveDirection();
-		_velocity = CalculateVelocity(_velocity, _maxSpeed, _acceleration, _decceleration, delta, moveDirection);
+		_velocity = CalculateVelocity(_velocity, _maxSpeed, _acceleration, _decceleration, delta, moveDirection, maxFallSpeed);
 		var player = Owner as Player;
 		_velocity = player.MoveAndSlide(_velocity, Player.FloorNormal);
 		
@@ -51,11 +52,11 @@ public class Move : State
 		var player = Owner as Player;
 		if (player.IsOnFloor() && @event.IsActionPressed("jump"))
 		{
-			_stateMachine.TransitionTo("Move/Air", new Dictionary<string, object>(){{"impulse", jumpImpulse}});
+			_stateMachine.TransitionTo("Move/Air", new Dictionary<string, object>(){{"impulse", true}});
 		}
 	}
 	
-	public static Vector2 CalculateVelocity(Vector2 oldVelocity, Vector2 maxSpeed, Vector2 acceleration, Vector2 decceleration, float delta, Vector2 moveDirection)
+	public static Vector2 CalculateVelocity(Vector2 oldVelocity, Vector2 maxSpeed, Vector2 acceleration, Vector2 decceleration, float delta, Vector2 moveDirection, float maxFallSpeed)
 	{
 		var newVelocity = oldVelocity;
 
@@ -81,7 +82,7 @@ public class Move : State
 		}
 
 		newVelocity.x = Mathf.Clamp(newVelocity.x, -maxSpeed.x, maxSpeed.x);
-		newVelocity.y= Mathf.Clamp(newVelocity.y, -maxSpeed.y, maxSpeed.y);
+		newVelocity.y= Mathf.Clamp(newVelocity.y, -maxSpeed.y, maxFallSpeed);
 		return newVelocity;
 	}
 	

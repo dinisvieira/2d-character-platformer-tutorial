@@ -85,4 +85,7 @@ position = Vector2( 1560, 630 )
 [node name="Player" parent="." instance=ExtResource( 7 )]
 position = Vector2( 513.293, 748.776 )
 
+[node name="Move" parent="Player/StateMachine" index="0"]
+deccelerationDefault = Vector2( 5000, 3000 )
+
 [editable path="Player"]
