@@ -1,10 +1,14 @@
-[gd_scene load_steps=4 format=2]
+[gd_scene load_steps=6 format=2]
 
 [ext_resource path="res://src/Objects/Circle.tscn" type="PackedScene" id=1]
 [ext_resource path="res://assets/graph-paper.svg" type="Texture" id=2]
 [ext_resource path="res://src/Agents/CharacterFollow.tscn" type="PackedScene" id=3]
+[ext_resource path="res://src/Agents/CharacterArriveTo.tscn" type="PackedScene" id=4]
+[ext_resource path="res://src/UI/Target.tscn" type="PackedScene" id=5]
 
 [node name="Game" type="Node2D"]
+
+[node name="Target" parent="." instance=ExtResource( 5 )]
 
 [node name="Circle" parent="." instance=ExtResource( 1 )]
 position = Vector2( 765, 327 )
@@ -40,3 +44,15 @@ region_rect = Rect2( 0, 0, 1280, 720 )
 
 [node name="CharacterFollow" parent="." instance=ExtResource( 3 )]
 position = Vector2( 485, 313 )
+targetPath = NodePath("../CharacterArriveTo")
+
+[node name="CharacterArriveTo" parent="." instance=ExtResource( 4 )]
+position = Vector2( 284.448, 225.009 )
+
+[node name="CharacterFollow2" parent="." instance=ExtResource( 3 )]
+position = Vector2( 593.27, 514.045 )
+targetPath = NodePath("../CharacterFollow")
+
+[node name="CharacterFollow3" parent="." instance=ExtResource( 3 )]
+position = Vector2( 828.295, 553.688 )
+targetPath = NodePath("../CharacterFollow2")
