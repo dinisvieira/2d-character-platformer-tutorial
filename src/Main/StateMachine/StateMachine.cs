@@ -14,7 +14,7 @@ public class StateMachine : Node
 	}
 	
 	// Called when the node enters the scene tree for the first time.
-	public async override void _Ready()
+	public override async void _Ready()
 	{
 		State = GetNode(initialState) as State;
 		await ToSignal(Owner, "ready");
@@ -38,7 +38,7 @@ public class StateMachine : Node
 		get { return _stateName; }
 		private set
 		{
-			GD.Print(value);
+			//GD.Print(value);
 			_stateName = value;
 		}
 	}

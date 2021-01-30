@@ -46,6 +46,16 @@ mouse_filter = 2
 reference_path = NodePath("../../../../Player/StateMachine")
 properties = PoolStringArray( "StateName" )
 
+[node name="DebugPanel3" parent="UI/DebugDock/Column" instance=ExtResource( 3 )]
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_top = 340.0
+margin_right = 408.0
+margin_bottom = 468.0
+mouse_filter = 2
+reference_path = NodePath("../../../../Player/Hook/StateMachine")
+properties = PoolStringArray( "StateName" )
+
 [node name="Level1" type="Node2D" parent="."]
 
 [node name="TileMap" type="TileMap" parent="Level1"]
@@ -86,6 +96,16 @@ position = Vector2( 1560, 630 )
 position = Vector2( 513.293, 748.776 )
 
 [node name="Move" parent="Player/StateMachine" index="0"]
-deccelerationDefault = Vector2( 5000, 3000 )
+deccelerationDefault = Vector2( 100000, 10000 )
+maxFallSpeed = 900.0
+
+[node name="Air" parent="Player/StateMachine/Move" index="2"]
+jumpImpulse = 900.0
+
+[node name="Hook" parent="Player/StateMachine" index="1"]
+hookMaxSpeed = 1600.0
+arrivePush = 1200.0
 
 [editable path="Player"]
+
+[editable path="Player/Hook"]

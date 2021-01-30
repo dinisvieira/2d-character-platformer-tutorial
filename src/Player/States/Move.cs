@@ -55,37 +55,68 @@ public class Move : State
 			_stateMachine.TransitionTo("Move/Air", new Dictionary<string, object>(){{"impulse", true}});
 		}
 	}
+
+	public override void Enter(IDictionary<string, object> msg = null)
+	{
+		var owner = Owner as Player;
+		owner.hookObj.Connect("hooked_onto_target", this, nameof(on_Hook_hooked_onto_target));
+	}
 	
+	public override void Exit()
+	{
+		var owner = Owner as Player;
+		owner.hookObj.Disconnect("hooked_onto_target", this, nameof(on_Hook_hooked_onto_target));
+	}
+
+	private void on_Hook_hooked_onto_target(Vector2 hookPosition)
+	{
+		var owner = Owner as Player;
+		var toTarget = hookPosition - owner.GlobalPosition;
+		if (owner.IsOnFloor() && toTarget.y > 0.0) //if player is on floor and target is above we don't hook (gameplay choice)
+		{
+			return;
+		}
+		else
+		{
+			_stateMachine.TransitionTo("Hook", new Dictionary<string, object>() { {"TargetGlobalPosition" ,hookPosition }, {"Velocity", _velocity} });
+		}
+	}
+
 	public static Vector2 CalculateVelocity(Vector2 oldVelocity, Vector2 maxSpeed, Vector2 acceleration, Vector2 decceleration, float delta, Vector2 moveDirection, float maxFallSpeed)
 	{
 		var newVelocity = oldVelocity;
 
-		newVelocity.y += moveDirection.y * acceleration.y * delta;
-
-		if (moveDirection.x != 0)
-		{
-			newVelocity.x += moveDirection.x * acceleration.x * delta;
-		}
-		else if(Math.Abs(newVelocity.x) > 0.1)
-		{
-			newVelocity.x -= decceleration.x * delta * Math.Sign(newVelocity.x);
-
-			//Check if vector doesn't go in the opposite direction after deccelerating completely. Setting to zero avoids that.
-			if (Math.Sign(newVelocity.x) == Math.Sign(oldVelocity.x))
-			{
-				newVelocity.x = newVelocity.x;
-			}
-			else
-			{
-				newVelocity.x = 0;
-			}
-		}
-
+		newVelocity += moveDirection * acceleration * delta;
 		newVelocity.x = Mathf.Clamp(newVelocity.x, -maxSpeed.x, maxSpeed.x);
-		newVelocity.y= Mathf.Clamp(newVelocity.y, -maxSpeed.y, maxFallSpeed);
+		newVelocity.y = Mathf.Clamp(newVelocity.y, -maxSpeed.y, maxSpeed.y);
 		return newVelocity;
+
+
+		//Code that takes decelleration into account
+		//var newVelocity = oldVelocity;
+
+		//newVelocity.y += moveDirection.y * acceleration.y * delta;
+
+		//if (moveDirection.x != 0)
+		//{
+		//	newVelocity.x += moveDirection.x * acceleration.x * delta;
+		//}
+		//else if (Math.Abs(newVelocity.x) > 0.1)
+		//{
+		//	newVelocity.x -= decceleration.x * delta * Math.Sign(newVelocity.x);
+
+		//	//Check if vector doesn't go in the opposite direction after deccelerating completely. Setting to zero avoids that.
+		//	if (Math.Sign(newVelocity.x) != Math.Sign(oldVelocity.x))
+		//	{
+		//		newVelocity.x = 0;
+		//	}
+		//}
+
+		//newVelocity.x = Mathf.Clamp(newVelocity.x, -maxSpeed.x, maxSpeed.x);
+		//newVelocity.y= Mathf.Clamp(newVelocity.y, -maxSpeed.y, maxFallSpeed);
+		//return newVelocity;
 	}
-	
+
 	public static Vector2 GetMoveDirection()
 	{
 		var moveRight = Input.GetActionStrength("move_right");

@@ -25,7 +25,7 @@ public class Run : State
 	{
 		if (Input.IsActionPressed("sprint"))
 		{
-			_parentMove._maxSpeed.x = maxSpeedSprint;
+			//_parentMove._maxSpeed.x = maxSpeedSprint;
 		}
 		else
 		{
@@ -33,7 +33,8 @@ public class Run : State
 		}
 
 		var player = Owner as Player;
-		if(player.IsOnFloor() && _parentMove._velocity.Length() < 1.0)
+		//if(player.IsOnFloor() && _parentMove._velocity.Length() < 1.0) //code for using decelleration
+		if(player.IsOnFloor() && Move.GetMoveDirection().x == 0.0)
 		{
 			_stateMachine.TransitionTo("Move/Idle");
 		}
