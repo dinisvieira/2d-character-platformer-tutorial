@@ -9,7 +9,7 @@ public class HookObj : Position2D
 	public SnapDetector snapDetector;
 	public Timer cooldown;
 
-	private bool isActive = true;
+	public bool isActive = true;
 
 	[Signal]
 	public delegate void hooked_onto_target(Vector2 hookPosition);

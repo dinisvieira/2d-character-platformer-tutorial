@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=2]
+[gd_scene load_steps=9 format=2]
 
 [ext_resource path="res://assets/theme/gdquest.theme" type="Theme" id=1]
 [ext_resource path="res://src/UI/debug/DebugDock.gd" type="Script" id=2]
@@ -7,8 +7,10 @@
 [ext_resource path="res://assets/tilesets/prototype.tres" type="TileSet" id=5]
 [ext_resource path="res://src/Objects/HookTarget.tscn" type="PackedScene" id=6]
 [ext_resource path="res://src/Player/Player.tscn" type="PackedScene" id=7]
+[ext_resource path="res://src/Main/Game.cs" type="Script" id=8]
 
 [node name="Game" type="Node"]
+script = ExtResource( 8 )
 
 [node name="UI" type="CanvasLayer" parent="."]
 layer = 100
@@ -95,14 +97,14 @@ position = Vector2( 1560, 630 )
 [node name="Player" parent="." instance=ExtResource( 7 )]
 position = Vector2( 513.293, 748.776 )
 
-[node name="Move" parent="Player/StateMachine" index="0"]
+[node name="SnapDetector" parent="Player/Hook" index="2"]
+visible = false
+
+[node name="Move" parent="Player/StateMachine" index="1"]
 deccelerationDefault = Vector2( 100000, 10000 )
 maxFallSpeed = 900.0
 
-[node name="Air" parent="Player/StateMachine/Move" index="2"]
-jumpImpulse = 900.0
-
-[node name="Hook" parent="Player/StateMachine" index="1"]
+[node name="Hook" parent="Player/StateMachine" index="2"]
 hookMaxSpeed = 1600.0
 arrivePush = 1200.0
 

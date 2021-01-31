@@ -4,10 +4,12 @@ using System;
 public class Player : KinematicBody2D
 {
 	
-	private StateMachine _stateMachine;
+	public StateMachine _stateMachine;
 	private CollisionShape2D _collider;
+	public Skin _skin;
 	public HookObj hookObj;
 	public static Vector2 FloorNormal = Vector2.Up;
+	//public Position2D _cameraRig;
 	
 	public bool _isActive;
 	public bool IsActive
@@ -18,7 +20,8 @@ public class Player : KinematicBody2D
 		set{
 			_isActive = value;
 			
-			if(_collider != null) { _collider.Disabled = !value; } 	
+			if(_collider != null) { _collider.Disabled = !value; }
+			hookObj.isActive = value;
 		}
 	}
 	
@@ -27,6 +30,8 @@ public class Player : KinematicBody2D
 	{
 		_stateMachine = GetNode("StateMachine") as StateMachine;
 		_collider = GetNode("CollisionShape2D") as CollisionShape2D;
+		//_cameraRig = GetNode("CameraRig") as CameraRig;
+		_skin = GetNode("Skin") as Skin;
 		hookObj = GetNode("Hook") as HookObj;
 	}
 
